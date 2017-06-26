@@ -1,2 +1,1 @@
-# powershellscripts
-Lorem ipsum
+# PowerShell Scripts

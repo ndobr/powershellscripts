@@ -11,4 +11,3 @@ $props = @{
     Width = 600
     Height = 600
 }
-

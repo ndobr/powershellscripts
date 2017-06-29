@@ -11,3 +11,7 @@ $props = @{
     Width = 600
     Height = 600
 }
+
+Read-Variable @props
+
+New-Item -Path "/sitecore/content/Showcase/int/Presentation/Styles" -ItemType "/sitecore/templates/Foundation/Experience Accelerator/Presentation/Style" -Name "StyleName"

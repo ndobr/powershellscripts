@@ -5,3 +5,4 @@ $items = Get-ChildItem -Path "/sitecore/content/Rapha Nocturne/Global/home" -Rec
     Write-Host $_.Paths.Path
     $_.Content = $_.Content.Replace([regex]::Match($_.Content, $regex).Groups.Item(1), '')
 }
+

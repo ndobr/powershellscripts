@@ -1,5 +1,7 @@
 $CityName = Show-Input "Please provide new city name"
 $street = Show-Input "Please provide street name"
+$country = Show-input  "Please provide coutry name"
+$CountryName = $country.ToLower()
 
 $url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + $CityName + $street
 $json = Invoke-WebRequest $url | ConvertFrom-JSON
@@ -23,7 +25,7 @@ $NewCityPage.Editing.EndEdit()
 
 $OurOffices = get-item -Path "/sitecore/content/CognifideCom/int/Data/Promos/Our offices"
 $OurOffices.Editing.BeginEdit()
-$OurOffices["PromoText"] = $OurOffices["PromoText"] + '<a href="~/link.aspx?_id=' + $NewCityPage.ID + '&amp;_z=z">' + $CityName + '</a>'
+$OurOffices["PromoText"] = $OurOffices["PromoText"]  + '<a href="~/link.aspx?_id=' + $NewCityPage.ID + '&amp;_z=z">' + ' ' + $CityName + '</a>'
 $OurOffices.Editing.EndEdit()
 
 $NewCityMap = New-Item -Path "/sitecore/content/CognifideCom/int/Data/Maps" -ItemType "/sitecore/templates/Feature/Experience Accelerator/Maps/Map" -Name $CityName
@@ -36,3 +38,26 @@ $NewCityMap["Height"] = '300'
 $NewCityMap["CentralPointLatidiute"] = $json.results.geometry.location.lat
 $NewCityMap["CentralPointLongitude"] = $json.results.geometry.location.lng
 $NewCityMap.Editing.EndEdit()
+
+$NewTemplateName = $CityName + ' Job Post'
+$NewTemplate = New-Item -Path "/sitecore/templates/Project/CognifideCom/Jobs" -ItemType "/sitecore/templates/System/Templates/Template" -Name $NewTemplateName
+#$($NewTemplate -as [Sitecore.Data.Items.TemplateItem]).CreateStandardValues()
+
+$NewTemplate.Editing.BeginEdit()
+$NewTemplate["__Icon"] = "Flags/32x32/flag_" + $CountryName + ".png"
+$NewTemplate.Editing.EndEdit()
+
+
+$NewItemQuery = New-Item -Path "/sitecore/content/CognifideCom/int/Settings/Item Queries" -ItemType "/sitecore/templates/Foundation/Experience Accelerator/Search/Query" -Name $CityName
+
+$NewItemQuery.Editing.BeginEdit()
+$NewItemQuery["Query"] = "query:..//*[@@templatename='" + $NewTemplateName + "']"
+$NewItemQuery.Editing.EndEdit()
+
+$FindRole = Get-Item -Path "/sitecore/content/CognifideCom/int/Home/join-us/find-a-role"
+
+$FindRole.Editing.BeginEdit()
+$FindRole["__Masters"] = $FindRole["__Masters"] + "|" + $NewTemplate.ID
+$FindRole.Editing.EndEdit()
+
+

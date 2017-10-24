@@ -1,9 +1,9 @@
 $CityName = Show-Input "Please provide new city name"
-$street = Show-Input "Please provide street name"
-$country = Show-input  "Please provide coutry name"
+$Street = Show-Input "Please provide street name"
+$Country = Show-input  "Please provide coutry name"
 $CountryName = $country.ToLower()
 
-$url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + $CityName + $street
+$url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + $CityName + $Street
 $json = Invoke-WebRequest $url | ConvertFrom-JSON
 $json.results.geometry.location.lat
 $json.results.geometry.location.lng
@@ -25,7 +25,7 @@ $NewCityPage.Editing.EndEdit()
 
 $OurOffices = get-item -Path "/sitecore/content/CognifideCom/int/Data/Promos/Our offices"
 $OurOffices.Editing.BeginEdit()
-$OurOffices["PromoText"] = $OurOffices["PromoText"]  + '<a href="~/link.aspx?_id=' + $NewCityPage.ID + '&amp;_z=z">' + ' ' + $CityName + '</a>'
+$OurOffices["PromoText"] = $OurOffices["PromoText"] + '<a href="~/link.aspx?_id=' + $NewCityPage.ID + '&amp;_z=z">' + ' ' + $CityName + '</a>'
 $OurOffices.Editing.EndEdit()
 
 $NewCityMap = New-Item -Path "/sitecore/content/CognifideCom/int/Data/Maps" -ItemType "/sitecore/templates/Feature/Experience Accelerator/Maps/Map" -Name $CityName
@@ -59,5 +59,3 @@ $FindRole = Get-Item -Path "/sitecore/content/CognifideCom/int/Home/join-us/find
 $FindRole.Editing.BeginEdit()
 $FindRole["__Masters"] = $FindRole["__Masters"] + "|" + $NewTemplate.ID
 $FindRole.Editing.EndEdit()
-
-
